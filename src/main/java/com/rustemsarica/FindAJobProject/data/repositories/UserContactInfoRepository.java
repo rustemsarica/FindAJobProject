@@ -7,5 +7,7 @@ import com.rustemsarica.FindAJobProject.data.entities.UserContactInfoEntity;
 
 @Repository
 public interface UserContactInfoRepository extends JpaRepository<UserContactInfoEntity,Long> {
+
+    UserContactInfoEntity findByUserId(Long userId);
     
 }

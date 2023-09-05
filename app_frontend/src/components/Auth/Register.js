@@ -15,10 +15,6 @@ import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import FormControl from '@mui/material/FormControl';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Grid from '@mui/material/Grid';
@@ -39,8 +35,6 @@ function Register(){
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [gender, setGender] = useState("FEMALE");
-    const [militaryStatus, setMilitaryStatus] = useState(true);
 
     const [errors, setErrors] = useState(null);
 
@@ -130,35 +124,6 @@ function Register(){
                                         value={username}
                                     />
                                 </FormControl>
-                                {/* <FormControl>
-                                    <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="demo-radio-buttons-group-label"
-                                        defaultValue={gender}
-                                        name="row-radio-buttons-group"
-                                        onChange={(e)=>{setGender(e.target.value)}}
-                                    >
-                                        <FormControlLabel value="FEMALE" control={<Radio />} label="Female" />
-                                        <FormControlLabel value="MALE" control={<Radio />} label="Male" />
-                                        <FormControlLabel value="OTHER" control={<Radio />} label="Other" />
-                                    </RadioGroup>
-                                </FormControl>
-                                {gender=="MALE" &&                                
-                                    <FormControl>
-                                        <FormLabel id="demo-radio-buttons-group-label">Military Status</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-radio-buttons-group-label"
-                                            defaultValue={militaryStatus}
-                                            name="row-radio-buttons-group"
-                                            onChange={(e)=>{setMilitaryStatus(e.target.value)}}
-                                        >
-                                            <FormControlLabel value={true} control={<Radio />} label="Completed" />
-                                            <FormControlLabel value={false} control={<Radio />} label="Not Completed" />
-                                        </RadioGroup>
-                                    </FormControl>
-                                } */}
                                 <FormControl fullWidth sx={{ m: 1 }} variant="outlined">
                                     <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
                                     <OutlinedInput

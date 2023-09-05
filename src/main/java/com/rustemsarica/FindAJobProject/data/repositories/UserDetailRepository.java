@@ -7,5 +7,7 @@ import com.rustemsarica.FindAJobProject.data.entities.UserDetailEntity;
 
 @Repository
 public interface UserDetailRepository extends JpaRepository<UserDetailEntity,Long> {
+
+    UserDetailEntity findByUserId(Long userId);
     
 }

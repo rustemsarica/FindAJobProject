@@ -7,17 +7,20 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Container, Paper, TableContainer } from "@mui/material";
+import { Avatar, Box, Button, Container, Grid, Paper, TableContainer } from "@mui/material";
 import TablePagination from '@mui/material/TablePagination';
-import { useNavigate,useParams } from "react-router-dom";
 
 import { Card, CardContent, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+
+import GitHubIcon from '@mui/icons-material/GitHub';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import LinkIcon from '@mui/icons-material/Link';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 export default function Profile(){
-    const navigate = useNavigate();
     
-
-    const {setPageName, isAdmin, userId} = useStateContext();
+    const {setPageName, loginUser} = useStateContext();
 
     const [user, setUser] = useState(null);
 
@@ -40,7 +43,7 @@ export default function Profile(){
 
     
     const getDayOffs = (pageNumber, size) => {
-        axiosClient.get("/day-offs/"+parseInt(userId)+"?page="+parseInt(pageNumber)+"&size="+parseInt(size))
+        axiosClient.get("/day-offs/"+parseInt(JSON.parse(loginUser).id)+"?page="+parseInt(pageNumber)+"&size="+parseInt(size))
         .then(
             ({data})=>{
                 setTransactions(data.content);
@@ -53,9 +56,10 @@ export default function Profile(){
     }
 
     const getUser = () => {
-        axiosClient.get("/users/"+parseInt(userId))
+        axiosClient.get("/users/"+parseInt(JSON.parse(loginUser).id))
         .then(
             ({data})=>{
+                console.log(data)
                 setUser(data);
             },
             (error)=>{
@@ -64,7 +68,7 @@ export default function Profile(){
     }
 
     useEffect(()=>{
-        setPageName("Home");   
+        setPageName("Profile");   
         getUser();
     },[])
     
@@ -75,15 +79,36 @@ export default function Profile(){
 
         
     return (
-        <Container style={{marginBottom:"80px"}}>
+        <Container style={{marginBottom:"80px", marginTop:"40px"}}>
             {user!=null &&
-            <Card style={{marginBottom:"40px"}}>
-                <CardContent>                        
-                    <Typography variant="h5" component="div" gutterBottom>{user.name}</Typography>
-                    <Typography variant="h6" component="div" gutterBottom>Salary : {user.salary}</Typography>
-                    <Typography variant="h6" component="div" gutterBottom>{user.username}</Typography>
-                </CardContent>
-            </Card>
+            <Box>
+                <Card style={{marginBottom:"40px", textAlign:"start"}}>
+                    <CardContent>
+                        <Grid container direction="row" >
+                            <Grid item xs={12} md={9}>
+                                
+                                <div style={{display:"flex", verticalAlign:"middle"}}>
+                                    <Avatar alt={user.name} style={{marginRight:"10px"}} />                                
+                                    <Typography style={{marginBlock:"auto"}} variant="h5" component="div" gutterBottom>{user.name}</Typography>
+                                </div>
+                                <Typography style={{marginTop:"10px"}} variant="h6" component="div" gutterBottom>{user.userDetail.title}</Typography>
+                            </Grid>
+                            <Grid item xs={12} md={3}>                      
+                                <Link to={"/profile/edit"}><Button variant="outlined">Profile Edit</Button></Link>
+                                <div style={{marginTop:"15px"}}>
+                                {user.username!=="" && <Link to={"mailTo:"+user.username} style={{textDecoration:"none"}}><AlternateEmailIcon/></Link>}
+                                {user.userContactInfo.linkedin!=="" && <Link to={user.userContactInfo.linkedin} style={{textDecoration:"none"}}><LinkedInIcon/></Link>}
+                                {user.userContactInfo.github!=="" && <Link to={user.userContactInfo.github} style={{textDecoration:"none"}}><GitHubIcon/></Link>}
+                                {user.userContactInfo.url!=="" && <Link to={user.userContactInfo.url} style={{textDecoration:"none"}}><LinkIcon/></Link>}
+                                </div>
+                            </Grid>
+                            <Grid item xs={12} md={12}>                      
+                                <Typography variant="div" component="div" gutterBottom>{user.userDetail.info}</Typography>
+                            </Grid>
+                        </Grid>  
+                    </CardContent>
+                </Card>
+            </Box>
             }
             <Paper>
                 <TableContainer>
