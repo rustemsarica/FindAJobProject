@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rustemsarica.FindAJobProject.business.dto.CompanyDto;
 import com.rustemsarica.FindAJobProject.business.dto.Role.CreateRoleDto;
+import com.rustemsarica.FindAJobProject.business.dto.Role.DeleteRoleDto;
 import com.rustemsarica.FindAJobProject.business.services.CompanyService;
 import com.rustemsarica.FindAJobProject.business.services.UserService;
 
@@ -56,7 +58,14 @@ public class CompanyController {
 
     @PostMapping("/roles/add")
     public ResponseEntity<?> addRole(@RequestBody @Valid CreateRoleDto createRoleDto){
-        companyService.addRole(createRoleDto);
-        return ResponseEntity.ok("Role created");
+        return companyService.addRole(createRoleDto);
+    }
+
+    @DeleteMapping("/{companyId}/roles/{roleId}/remove")
+    public ResponseEntity<?> removeRole(@PathVariable Long companyId, @PathVariable Long roleId){
+        System.out.println("*****************");
+        System.out.println(roleId);
+        System.out.println("*****************");
+        return companyService.removeRole(roleId,companyId);
     }
 }

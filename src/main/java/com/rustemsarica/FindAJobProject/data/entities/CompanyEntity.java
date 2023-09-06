@@ -10,10 +10,8 @@ import com.rustemsarica.FindAJobProject.data.entities.Role.RoleEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -43,10 +41,7 @@ public class CompanyEntity extends BaseEntity {
 
     private String website;
 
-    @ManyToMany
-    @JoinTable(name = "company_roles",
-        joinColumns = @JoinColumn(name = "company_id"),
-        inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @OneToMany(mappedBy = "company")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<RoleEntity> roles;
 

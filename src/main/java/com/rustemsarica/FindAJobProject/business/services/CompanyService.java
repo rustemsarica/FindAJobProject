@@ -17,4 +17,6 @@ public interface CompanyService {
 
     public ResponseEntity<?> addRole(CreateRoleDto createRoleDto);
 
+    public ResponseEntity<?> removeRole(Long roleId, Long companyId);
+
 }

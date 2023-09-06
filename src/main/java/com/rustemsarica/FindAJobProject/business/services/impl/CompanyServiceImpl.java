@@ -12,7 +12,6 @@ import com.rustemsarica.FindAJobProject.business.services.RolePermissionService;
 import com.rustemsarica.FindAJobProject.business.services.UserService;
 import com.rustemsarica.FindAJobProject.data.entities.CompanyEntity;
 import com.rustemsarica.FindAJobProject.data.entities.CompanyEntity.CompanyEntityBuilder;
-import com.rustemsarica.FindAJobProject.data.entities.Role.RoleEntity;
 import com.rustemsarica.FindAJobProject.data.repositories.CompanyRepository;
 
 import jakarta.validation.Valid;
@@ -74,11 +73,21 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public ResponseEntity<?> addRole(CreateRoleDto createRoleDto) {
-        RoleEntity roleEntity = rolePermissionService.createRole(createRoleDto);
+
         CompanyEntity companyEntity = getCompany(createRoleDto.getCompanyId());
-        companyEntity.getRoles().add(roleEntity);
-        companyRepository.save(companyEntity);
-        return ResponseEntity.ok("Role added");
+        if(createRoleDto.getRoleId()!=null){            
+            rolePermissionService.updateRole(createRoleDto, companyEntity);
+        }else{
+            rolePermissionService.createRole(createRoleDto,companyEntity);
+        }
+
+        return ResponseEntity.ok("Company roles updated");        
+    }
+
+    @Override
+    public ResponseEntity<?> removeRole(Long roleId, Long companyId) {
+        rolePermissionService.remove(roleId);        
+        return ResponseEntity.ok("Company roles updated"); 
     }
 
     

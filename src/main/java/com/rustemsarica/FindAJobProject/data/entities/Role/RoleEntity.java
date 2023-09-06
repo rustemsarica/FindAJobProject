@@ -5,12 +5,15 @@ import java.util.Set;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rustemsarica.FindAJobProject.data.entities.BaseEntity;
+import com.rustemsarica.FindAJobProject.data.entities.CompanyEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -30,6 +33,10 @@ public class RoleEntity extends BaseEntity{
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Set<PermissionEntity> permissions;
 
+    @ManyToOne
+    @JsonIgnore
+    private CompanyEntity company;
+
     public String getName() {
         return name;
     }
@@ -44,6 +51,14 @@ public class RoleEntity extends BaseEntity{
 
     public void setPermissions(Set<PermissionEntity> permissions) {
         this.permissions = permissions;
+    }
+
+    public CompanyEntity getCompany() {
+        return company;
+    }
+
+    public void setCompany(CompanyEntity company) {
+        this.company = company;
     }
 
     

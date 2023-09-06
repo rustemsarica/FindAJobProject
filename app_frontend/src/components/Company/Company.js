@@ -55,7 +55,7 @@ export default function Company(){
         })
     }
 
-    const [permissions, setPermissions] = useState();
+    const [permissions, setPermissions] = useState([]);
 
     const getPermissions = () => {
         axiosClient.get("/role-permission/permissions")
@@ -75,10 +75,23 @@ export default function Company(){
 
     const handleClickRoleModalClose = () => {
         setRoleModalOpen(false);
+        setRoleId(null);
+        setRolePermissions([]);
+        setRoleName("");  
     };
   
-    const[roleName, setRoleName] = useState();
+    const[roleId, setRoleId] = useState(null);
+    const[roleName, setRoleName] = useState("");
     const[rolePermissions, setRolePermissions] = useState([]);
+
+    const editRole = (role) => {
+        setRoleId(role.id);
+        setRoleName(role.name);
+        setRolePermissions(role.permissions.map(element => {
+            return element.id
+        }));
+        handleClickRoleModalOpen();
+    }
 
     const changePermission = (e,permission)=>{
         if(e.target.checked){
@@ -92,15 +105,26 @@ export default function Company(){
     const createRole = (ev) => {
         ev.preventDefault()
         var formData = {
+            "roleId": roleId,
             "companyId": companyId,
             "name":roleName,
             "permissions":rolePermissions
         };
         axiosClient.post("/company/roles/add", formData)
         .then(({data}) => {
-            getCompany();
-            setRolePermissions([]);
-            setRoleName("");          
+            handleClickRoleModalClose();
+            getCompany();  
+        })
+        .catch((error) => {
+
+        })
+    } 
+
+    const deleteRole = (deleteRoleId) => {
+        
+        axiosClient.delete("/company/"+companyId+"/roles/"+deleteRoleId+"/remove")
+        .then(({data}) => {
+            getCompany();  
         })
         .catch((error) => {
 
@@ -164,9 +188,6 @@ export default function Company(){
                                 </div>
                             </Grid>
                             <Grid item xs={12} md={12}>                      
-                                {/* <Typography variant="div" component="div" gutterBottom>{user.userDetail.info}</Typography> */}
-                            </Grid>
-                            <Grid item xs={12} md={12}>                      
                                 <Tabs value={selectedTab} onChange={handleTabChange} centered>
                                     <Tab label="Posts" />
                                     <Tab label="Jobs" />
@@ -206,42 +227,10 @@ export default function Company(){
                             <Grid container direction="row" >
 
                             <Button variant="outlined" onClick={handleClickRoleModalOpen}>Open alert dialog</Button>
-                            <Dialog
-                                open={roleModalOpen}
-                                onClose={handleClickRoleModalClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <form onSubmit={createRole}>
-                                    <DialogTitle id="alert-dialog-title">Create Role</DialogTitle>
-                                    <DialogContent>
-                                        
-                                        <FormControl fullWidth sx={{ m: 1 }}>
-                                            <InputLabel htmlFor="outlined-adornment-amount">Name</InputLabel>
-                                            <OutlinedInput
-                                                id="outlined-adornment-amount"
-                                                label="Name" 
-                                                onChange={(ev)=>setRoleName(ev.target.value)}
-                                                value={roleName}
-                                            />
-                                        </FormControl>
-                                        <FormGroup>
-                                            {permissions.map((permission,i)=>(
-                                                <FormControlLabel key={"permission-"+i} control={<Switch onChange={(e)=>{changePermission(e,permission)}} />} label={permission.name} />
-                                            ))}                                        
-                                        </FormGroup>
-                                        
-                                    </DialogContent>
-                                    <DialogActions>
-                                        <Button onClick={handleClickRoleModalClose}>Disagree</Button>
-                                        <Button type="Submit" onClick={handleClickRoleModalClose} autoFocus>Agree</Button>
-                                    </DialogActions>
-                                </form>
-                            </Dialog>
                                 <Grid item xs={12} md={12} style={{marginTop:"20px"}}>
                                     <Stack direction="column" spacing={1}>
-                                        {company.roles.map((role)=>(
-                                            <div key={role}>{role.name}</div>
+                                        {company.roles.map((role,i)=>(
+                                            <div key={role.name+i}>{role.name} <Button onClick={()=>{editRole(role)}}>Edit</Button> <Button onClick={()=>{deleteRole(role.id)}}>Delete</Button> </div>
                                         ))}
                                     </Stack>    
                                 </Grid>
@@ -251,6 +240,38 @@ export default function Company(){
                 }
             </Box>
             }
+            <Dialog
+                open={roleModalOpen}
+                onClose={handleClickRoleModalClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <form onSubmit={createRole}>
+                    <DialogTitle id="alert-dialog-title">{roleId == null ? "Create" : "Edit"} Role</DialogTitle>
+                    <DialogContent>
+                        
+                        <FormControl fullWidth sx={{ m: 1 }}>
+                            <InputLabel htmlFor="outlined-adornment-amount">Name</InputLabel>
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                label="Name"
+                                onChange={(ev)=>{setRoleName(ev.target.value)}}
+                                value={roleName}
+                            />
+                        </FormControl>
+                        <FormGroup>
+                            {permissions.map((permission,i)=>(
+                                <FormControlLabel key={"permission-"+i} control={<Switch defaultChecked={rolePermissions.includes(permission.id)} onChange={(e)=>{changePermission(e,permission)}} />} label={permission.name} />
+                            ))}                                        
+                        </FormGroup>
+                        
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={handleClickRoleModalClose}>Disagree</Button>
+                        <Button type="Submit" autoFocus>Agree</Button>
+                    </DialogActions>
+                </form>
+            </Dialog>
         </Container>
     )
        
