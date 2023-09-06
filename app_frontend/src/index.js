@@ -10,7 +10,7 @@ import { SnackbarProvider } from 'notistack';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ContextProvider>
-      <SnackbarProvider maxSnack={3}>
+      <SnackbarProvider maxSnack={3} >
           <App />
       </SnackbarProvider>
   </ContextProvider>

@@ -20,9 +20,9 @@ public interface UserService {
     public ResponseEntity<Map<String,Boolean>> deleteUser(Long id);
 
     public void saveUser(UserEntity userEntity);
+    public Page<UserEntity> getAllUsersPaginate(Pageable pageable);
 
     //model mapper
     public UserDto entityToDto(UserEntity user);
     public UserEntity dtoToEntity(UserDto userDto);
-    public Page<UserEntity> getAllUsersPaginate(Pageable pageable);
 }

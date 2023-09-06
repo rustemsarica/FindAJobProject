@@ -11,6 +11,8 @@ import Header from "./components/Partials/Header";
 import UserDetail from './components/Home/UserDetail';
 import Profile from './components/User/Profile';
 import ProfileUpdate from './components/User/ProfilUpdate';
+import CompanyForm from './components/Company/CompanyForm';
+import Company from './components/Company/Company';
 const theme = createTheme({
   palette: {
     background: {
@@ -49,6 +51,7 @@ const darkTheme = createTheme({
       disabled:'#e76097'
     }
   },
+  
 });
 
 function App() {
@@ -74,8 +77,13 @@ function App() {
                       }
                     ></Route>
                     <Route exact path='/profile' element={token==null ? <Navigate to="/auth/login"/> : <Profile></Profile>} />
+
+                    <Route exact path='/company/:companyId' element={token==null ? <Navigate to="/auth/login"/> : <Company></Company>} />
+                    <Route exact path='/company/edit/:companyId' element={token==null ? <Navigate to="/auth/login"/> : <CompanyForm></CompanyForm>} />
+                    <Route exact path='/company/create' element={token==null ? <Navigate to="/auth/login"/> : <CompanyForm></CompanyForm>} />
+
                     <Route exact path='/profile/edit' element={token==null ? <Navigate to="/auth/login"/> : <ProfileUpdate></ProfileUpdate>} />
-                    <Route exact path='/user/:userId' element={token == null || JSON.parse(loginUser).role!=="ROLE_ADMIN" ? <Navigate to="/"/> : <UserDetail />}></Route>
+                    <Route exact path='/user/:userId' element={token == null ? <Navigate to="/"/> : <UserDetail />}></Route>
                     <Route exact path='/auth/register' element={token != null ? <Navigate to="/"/> : <Register/>}></Route>
                     <Route exact path='/auth/login' element={token != null ? <Navigate to="/"/> : <Login/>}></Route>
                     

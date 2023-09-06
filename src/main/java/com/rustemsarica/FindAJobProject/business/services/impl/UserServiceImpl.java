@@ -42,11 +42,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-
         UserEntity userEntity = dtoToEntity(userDto);        
         userRepository.save(userEntity);
-
-
         return userDto;
     }
 

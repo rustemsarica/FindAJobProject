@@ -21,6 +21,31 @@ import { Card, CardContent, CardActions } from "@mui/material";
 import { firstUpperCase } from "../contexts/helpers";
 import {  enqueueSnackbar } from 'notistack';
 
+import PropTypes from 'prop-types';
+import { IMaskInput } from 'react-imask';
+
+const TextMaskCustom = React.forwardRef(function TextMaskCustom(props, ref) {
+    const { onChange, ...other } = props;
+    return (
+      <IMaskInput
+        {...other}
+        mask="(#00) 000 0000"
+        definitions={{
+          '#': /[1-9]/,
+        }}
+        inputRef={ref}
+        onAccept={(value) => onChange({ target: { name: props.name, value } })}
+        overwrite
+      />
+    );
+  });
+  
+  TextMaskCustom.propTypes = {
+    name: PropTypes.string.isRequired,
+    onChange: PropTypes.func.isRequired,
+  };
+  
+  
 export default function ProfileUpdate(){
     
     const {setPageName, loginUser} = useStateContext();
@@ -191,9 +216,11 @@ export default function ProfileUpdate(){
                                         <InputLabel htmlFor="outlined-adornment-amount">Phone</InputLabel>
                                         <OutlinedInput
                                             id="outlined-adornment-amount"
-                                            label="Name" 
+                                            label="Phone" 
+                                            name="phone"
                                             onChange={(ev)=>setPhone(ev.target.value)}
                                             value={phone}
+                                            inputComponent={TextMaskCustom}
                                         />
                                     </FormControl>                                     
                                     <FormControl fullWidth sx={{ m: 1 }}>

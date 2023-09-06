@@ -183,11 +183,15 @@ function Header() {
                         onClose={handleCloseUserMenu}
                     >
                     
-                        <MenuItem key={"profile"} >
-                            <Link to={"/profile"} style={{textDecoration:"none", color:"white"}}>
-                                <Typography textAlign="center">Profile</Typography>
-                            </Link>
+                        
+                        <MenuItem component={Link} to={"/profile"} key={"profile"} onClick={handleCloseUserMenu} >                            
+                            <Typography textAlign="center">Profile</Typography>                            
+                        </MenuItem>                    
+                    
+                        <MenuItem key={"companyCreate"} component={Link} to={"/company/create"} onClick={handleCloseUserMenu} >                            
+                            <Typography textAlign="center">Company</Typography>                            
                         </MenuItem>
+
                         <MenuItem key={"logout"} onClick={()=>{handleCloseUserMenu(); onLogout();}}>
                             <Typography textAlign="center">Logout</Typography>
                         </MenuItem>

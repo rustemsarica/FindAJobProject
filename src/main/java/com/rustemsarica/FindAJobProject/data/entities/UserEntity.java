@@ -59,6 +59,13 @@ public class UserEntity extends BaseEntity{
     @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
     private UserContactInfoEntity userContactInfo;
 
+    @OneToOne(mappedBy = "user", fetch = FetchType.EAGER)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private JobEntity job;
+
+    @OneToMany(mappedBy = "owner", fetch = FetchType.EAGER)
+    private List<CompanyEntity> companies;
+
     public String getName() {
         return name;
     }
@@ -138,6 +145,22 @@ public class UserEntity extends BaseEntity{
 
     public void setUserContactInfo(UserContactInfoEntity userContactInfo) {
         this.userContactInfo = userContactInfo;
+    }
+
+    public JobEntity getJob() {
+        return job;
+    }
+
+    public void setJob(JobEntity job) {
+        this.job = job;
+    }
+
+    public List<CompanyEntity> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(List<CompanyEntity> companies) {
+        this.companies = companies;
     }
     
     
